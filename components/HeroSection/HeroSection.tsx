@@ -1,9 +1,16 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Image from "next/image";
 import styles from "./HeroSection.module.css";
 import type { CardKey, Rect } from "./types";
+
 import {
   NEXT_SELECTOR,
   OFF,
@@ -13,11 +20,17 @@ import {
   S2_MOBILE,
   OFF_MOBILE,
 } from "./constants";
+
 import { clamp, easeInOutCubic, lerp, mixRect, remap01 } from "./math";
-import { useEarlySnap, useScrollProgress } from "./hooks";
+import { useScrollProgress, useEarlySnap } from "./hooks";
+
 import { Roboto } from "next/font/google";
 
-import { defaultHeroContent, HeroResponse } from "@/constants/heroContent";
+import {
+  defaultHeroContent,
+  HeroResponse,
+} from "@/constants/heroContent";
+
 import { fetchHeroContent } from "@/services/api";
 
 const roboto = Roboto({
@@ -26,20 +39,29 @@ const roboto = Roboto({
   display: "swap",
 });
 
-const rectStyle = (rc: Rect, extra?: CSSProperties): CSSProperties => ({
+const rectStyle = (
+  rc: Rect,
+  extra?: CSSProperties
+): CSSProperties => ({
   position: "absolute",
-  left: `${rc.x}vw`,
-  top: `${rc.y}vh`,
+
   width: `${rc.w}vw`,
   height: `${rc.h}vh`,
+
   borderRadius: `${rc.r}px`,
   overflow: "hidden",
+
+  transform: `translate3d(${rc.x}vw, ${rc.y}vh, 0)`,
+
+  willChange: "transform",
+
   ...extra,
 });
 
 export default function HeroSection() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLDivElement | null>(null);
+
   const [isMobile, setIsMobile] = useState(false);
   const [apiData, setApiData] = useState<HeroResponse | null>(null);
 
@@ -51,17 +73,20 @@ export default function HeroSection() {
     supreme: null,
   });
 
+  /* API DATA */
   useEffect(() => {
-    const loadContent = async () => {
+    const load = async () => {
       const data = await fetchHeroContent();
       setApiData(data);
     };
 
-    loadContent();
+    load();
   }, []);
 
+  /* SCROLL PROGRESS */
   const raw = useScrollProgress(wrapperRef);
 
+  /* SNAP LOGIC */
   useEarlySnap({
     raw,
     textRef,
@@ -71,39 +96,67 @@ export default function HeroSection() {
     safeGapPx: 28,
   });
 
+  /* SCROLL PHASES */
   const pIn = easeInOutCubic(remap01(raw, 0, 0.45));
   const pCluster = easeInOutCubic(remap01(raw, 0.45, 0.75));
 
+  /* CONTENT */
   const content = useMemo(() => {
     const apiImages = apiData?.cardImages;
 
     return {
-      titleLine1: apiData?.titleLine1?.trim() || defaultHeroContent.titleLine1,
-      fastWord: apiData?.fastWord?.trim() || defaultHeroContent.fastWord,
+      titleLine1:
+        apiData?.titleLine1?.trim() ||
+        defaultHeroContent.titleLine1,
+
+      fastWord:
+        apiData?.fastWord?.trim() ||
+        defaultHeroContent.fastWord,
+
       titleLine2AfterFastWord:
         apiData?.titleLine2AfterFastWord?.trim() ||
         defaultHeroContent.titleLine2AfterFastWord,
-      lastLine: apiData?.lastLine?.trim() || defaultHeroContent.lastLine,
+
+      lastLine:
+        apiData?.lastLine?.trim() ||
+        defaultHeroContent.lastLine,
 
       cardImages: {
         payment:
-          apiImages?.payment?.trim() || defaultHeroContent.cardImages.payment,
+          apiImages?.payment?.trim() ||
+          defaultHeroContent.cardImages.payment,
+
         champion:
-          apiImages?.champion?.trim() || defaultHeroContent.cardImages.champion,
-        cart: apiImages?.cart?.trim() || defaultHeroContent.cardImages.cart,
+          apiImages?.champion?.trim() ||
+          defaultHeroContent.cardImages.champion,
+
+        cart:
+          apiImages?.cart?.trim() ||
+          defaultHeroContent.cardImages.cart,
+
         shop3d:
-          apiImages?.shop3d?.trim() || defaultHeroContent.cardImages.shop3d,
+          apiImages?.shop3d?.trim() ||
+          defaultHeroContent.cardImages.shop3d,
+
         supreme:
-          apiImages?.supreme?.trim() || defaultHeroContent.cardImages.supreme,
+          apiImages?.supreme?.trim() ||
+          defaultHeroContent.cardImages.supreme,
       },
     };
   }, [apiData]);
 
+  /* LAYOUT SET */
   const S1_SET = isMobile ? S1_MOBILE : S1;
   const S2_SET = isMobile ? S2_MOBILE : S2;
   const OFF_SET = isMobile ? OFF_MOBILE : OFF;
 
-  const pay0: Rect = useMemo(() => ({ x: 0, y: 0, w: 100, h: 100, r: 0 }), []);
+  /* RECT CALCULATIONS */
+
+  const pay0: Rect = useMemo(
+    () => ({ x: 0, y: 0, w: 100, h: 100, r: 0 }),
+    []
+  );
+
   const pay1 = mixRect(pay0, S1_SET.payment, pIn);
   const pay2 = mixRect(pay1, S2_SET.payment, pCluster);
 
@@ -119,6 +172,8 @@ export default function HeroSection() {
   const sup1 = mixRect(OFF_SET.supreme, S1_SET.supreme, pIn);
   const sup2 = mixRect(sup1, S2_SET.supreme, pCluster);
 
+  /* CARD VISIBILITY */
+
   const cardsOpacity = clamp(pIn * 1.25);
 
   const bigTextOpacity = clamp(pIn * 1.6);
@@ -126,6 +181,8 @@ export default function HeroSection() {
 
   const textScale = lerp(bigTextScale, 0.56, pCluster);
   const textTop = lerp(52, 50, pCluster);
+
+  /* CARD LIST */
 
   const cards = useMemo(
     () => [
@@ -135,67 +192,88 @@ export default function HeroSection() {
         style: {
           opacity: 1,
           zIndex: 10,
-          background: "linear-gradient(160deg,#e7e7e7,#bdbdbd)",
-          boxShadow: `0 ${lerp(0, 14, pIn)}px ${lerp(0, 42, pIn)}px rgba(0,0,0,${lerp(
+          background:
+            "linear-gradient(160deg,#e7e7e7,#bdbdbd)",
+          boxShadow: `0 ${lerp(
             0,
-            0.12,
+            14,
             pIn
-          )})`,
-        } as CSSProperties,
+          )}px ${lerp(
+            0,
+            42,
+            pIn
+          )}px rgba(0,0,0,${lerp(0, 0.12, pIn)})`,
+        },
       },
+
       {
         key: "champion" as const,
         rect: ch2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background: "linear-gradient(135deg,#e1e1e1,#bfbfbf)",
-        } as CSSProperties,
+          background:
+            "linear-gradient(135deg,#e1e1e1,#bfbfbf)",
+        },
       },
+
       {
         key: "cart" as const,
         rect: cart2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background: "linear-gradient(135deg,#f6c6d6,#eaa3bd)",
-        } as CSSProperties,
+          background:
+            "linear-gradient(135deg,#f6c6d6,#eaa3bd)",
+        },
       },
+
       {
         key: "shop3d" as const,
         rect: shop2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background: "linear-gradient(135deg,#ffd166,#f2b500)",
-        } as CSSProperties,
+          background:
+            "linear-gradient(135deg,#ffd166,#f2b500)",
+        },
       },
+
       {
         key: "supreme" as const,
         rect: sup2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background: "linear-gradient(135deg,#d6dbe1,#b8c1cc)",
-        } as CSSProperties,
+          background:
+            "linear-gradient(135deg,#d6dbe1,#b8c1cc)",
+        },
       },
     ],
     [pay2, ch2, cart2, shop2, sup2, cardsOpacity, pIn]
   );
 
+  /* MOBILE CHECK */
+
   useEffect(() => {
-    const check = () => {
+    const check = () =>
       setIsMobile(window.innerWidth < 768);
-    };
 
     check();
-    window.addEventListener("resize", check);
 
-    return () => window.removeEventListener("resize", check);
+    const handler = () => requestAnimationFrame(check);
+
+    window.addEventListener("resize", handler);
+
+    return () =>
+      window.removeEventListener("resize", handler);
   }, []);
 
   return (
-    <div className={`${styles.wrap} ${roboto.className}`} ref={wrapperRef}>
+    <div
+      className={`${styles.wrap} ${roboto.className}`}
+      ref={wrapperRef}
+    >
       <div className={styles.sticky}>
         {cards.map(({ key, rect, style }) => (
           <div
@@ -210,7 +288,7 @@ export default function HeroSection() {
               src={content.cardImages[key]}
               alt={key}
               fill
-              sizes="(max-width: 768px) 92vw, 420px"
+              sizes="(max-width:768px) 92vw, 420px"
               className={styles.cardImg}
               priority={key === "payment"}
             />
@@ -229,16 +307,31 @@ export default function HeroSection() {
           <div
             className={styles.heroH1}
             style={{
-              fontSize: `clamp(${lerp(28, 46, pCluster)}px, ${lerp(
+              fontSize: `clamp(${lerp(
+                28,
+                46,
+                pCluster
+              )}px, ${lerp(
                 4.8,
                 3.2,
                 pCluster
-              )}vw, ${lerp(72, 36, pCluster)}px)`,
+              )}vw, ${lerp(
+                72,
+                36,
+                pCluster
+              )}px)`,
             }}
           >
-            {content.titleLine1} <br />
-            <span className={styles.fastWord}>{content.fastWord}</span>{" "}
-            {content.titleLine2AfterFastWord} <br />
+            {content.titleLine1}
+            <br />
+
+            <span className={styles.fastWord}>
+              {content.fastWord}
+            </span>{" "}
+            {content.titleLine2AfterFastWord}
+
+            <br />
+
             <span className={styles.lastLine}>
               <span>{content.lastLine}</span>
             </span>

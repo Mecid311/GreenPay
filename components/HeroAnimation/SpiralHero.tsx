@@ -1,21 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import "./SpiralHero.css";
-import { Roboto } from "next/font/google";
 
 import {
   defaultSpiralHeroContent,
   SpiralHeroResponse,
 } from "@/constants/spiralHeroContent";
-import { fetchSpiralHeroContent } from "@/services/api";
 
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-});
+import { fetchSpiralHeroContent } from "@/services/api";
 
 export default function SpiralHero() {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -23,8 +16,12 @@ export default function SpiralHero() {
 
   useEffect(() => {
     const loadContent = async () => {
-      const data = await fetchSpiralHeroContent();
-      setApiData(data);
+      try {
+        const data = await fetchSpiralHeroContent();
+        setApiData(data);
+      } catch {
+        console.warn("Hero API failed");
+      }
     };
 
     loadContent();
@@ -34,14 +31,16 @@ export default function SpiralHero() {
     const svg = svgRef.current;
     if (!svg) return;
 
-    const paths = svg.querySelectorAll<SVGPathElement>(".sp");
-    const gradients = svg.querySelectorAll<SVGLinearGradientElement>(
-      "defs linearGradient",
+    const paths = Array.from(svg.querySelectorAll<SVGPathElement>(".sp"));
+
+    const gradients = Array.from(
+      svg.querySelectorAll<SVGLinearGradientElement>("defs linearGradient"),
     );
+
     const N = paths.length;
 
     let t = 0;
-    let frame = 0;
+    let frame: number;
 
     function hslToHex(h: number, s: number, l: number) {
       s /= 100;
@@ -59,60 +58,47 @@ export default function SpiralHero() {
       return `#${f(0)}${f(8)}${f(4)}`;
     }
 
-    function animate() {
+    const animate = () => {
       t += 0.008;
-      const T = t;
 
-      paths.forEach((path, i) => {
-        const p = i / Math.max(1, N - 1);
+      for (let i = 0; i < N; i++) {
+        const path = paths[i];
+        const p = i / (N - 1);
 
-        const wavePhase = p * Math.PI * 6 - T * 2.5;
-        const wave1 = 0.5 + 0.5 * Math.sin(wavePhase);
-        const breath = 0.5 + 0.5 * Math.sin(T * 0.6 + p * Math.PI * 2);
-        const shimmer = 0.5 + 0.5 * Math.sin(T * 4 + p * Math.PI * 8);
-        const sweep = 0.5 + 0.5 * Math.sin(T * 1.2 - p * Math.PI * 4);
+        const wave = Math.sin(p * Math.PI * 6 - t * 2.5);
+        const breath = Math.sin(t * 0.6 + p * Math.PI * 2);
 
-        const baseOp = (i + 1) / N;
-        const waveOp = wave1 * 0.4 + breath * 0.3 + sweep * 0.2 + 0.1;
-        const finalOp = Math.max(
-          0.008,
-          Math.min(1, baseOp * (0.4 + waveOp * 0.8)),
-        );
+        const opacity =
+          0.3 + 0.6 * (0.5 + 0.5 * wave) + 0.2 * (0.5 + 0.5 * breath);
 
-        path.setAttribute("opacity", finalOp.toFixed(3));
+        path.style.opacity = opacity.toFixed(3);
+      }
 
-        const swBase = 6.25195;
-        const swPulse = 1 + shimmer * 0.6 * (1 - p * 0.7);
+      frame = requestAnimationFrame(animate);
+    };
 
-        path.setAttribute(
-          "stroke-width",
-          (swBase * swPulse * (0.7 + p * 0.5)).toFixed(3),
-        );
-      });
-
+    const updateGradients = () => {
       gradients.forEach((grad, i) => {
         const stops = grad.querySelectorAll("stop");
         if (stops.length < 2) return;
 
-        const p = i / Math.max(1, gradients.length - 1);
+        const p = i / gradients.length;
 
-        const hue0 = 155 + 15 * Math.sin(T * 0.2 + p * 2);
-        const hue1 = 170 + 12 * Math.sin(T * 0.24 + p * 3);
-
-        const dark = hslToHex(hue0, 70, 8 + p * 6);
-        const bright = hslToHex(hue1, 70, 52 - p * 10);
+        const dark = hslToHex(160 + 10 * Math.sin(t + p), 70, 8 + p * 6);
+        const bright = hslToHex(170 + 10 * Math.sin(t + p), 70, 52 - p * 10);
 
         stops[0].setAttribute("stop-color", dark);
         stops[1].setAttribute("stop-color", bright);
       });
-
-      frame = requestAnimationFrame(animate);
-    }
+    };
 
     frame = requestAnimationFrame(animate);
 
+    const gradientInterval = setInterval(updateGradients, 120);
+
     return () => {
       cancelAnimationFrame(frame);
+      clearInterval(gradientInterval);
     };
   }, []);
 
@@ -122,17 +108,12 @@ export default function SpiralHero() {
       subtitle: apiData?.subtitle?.trim() || defaultSpiralHeroContent.subtitle,
       scrollText:
         apiData?.scrollText?.trim() || defaultSpiralHeroContent.scrollText,
-      spiralSvgSrc:
-        apiData?.spiralSvgSrc?.trim() || defaultSpiralHeroContent.spiralSvgSrc,
     }),
     [apiData],
   );
 
   return (
-    <section
-      className={`spiral-hero-section ${roboto.className}`}
-      id="hero-section"
-    >
+    <section className="spiral-hero-section">
       <div className="spiral-bg-layer">
         <div className="spiral-glow" />
 
@@ -2189,13 +2170,7 @@ export default function SpiralHero() {
         <div className="spiral-scroll-indicator">
           <span>{content.scrollText}</span>
 
-          <svg
-            width="24"
-            height="38"
-            viewBox="0 0 24 38"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="24" height="38" viewBox="0 0 24 38" fill="none">
             <rect
               x="1"
               y="1"
@@ -2205,20 +2180,16 @@ export default function SpiralHero() {
               stroke="white"
               strokeWidth="1.5"
             />
-            <rect x="10.5" y="7" width="3" height="8" rx="1.5" fill="white">
-              <animate
-                attributeName="y"
-                values="7;14;7"
-                dur="1.6s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="1;0;1"
-                dur="1.6s"
-                repeatCount="indefinite"
-              />
-            </rect>
+
+            <rect
+              x="10.5"
+              y="7"
+              width="3"
+              height="8"
+              rx="1.5"
+              fill="white"
+              className="scroll-dot"
+            />
           </svg>
 
           <i />

@@ -1,28 +1,51 @@
-import { useEffect, useRef, useState } from 'react';
-import { clamp } from './math';
-import type { CardKey } from './types';
+import { useEffect, useRef, useState } from "react";
+import { clamp } from "./math";
+import type { CardKey } from "./types";
 
-export function useScrollProgress(wrapperRef: React.RefObject<HTMLElement>) {
-  const [raw, setRaw] = useState(0);
+/* SCROLL PROGRESS */
+
+export function useScrollProgress(
+  wrapperRef: React.RefObject<HTMLElement>
+) {
+  const progressRef = useRef(0);
+  const [, forceRender] = useState(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
-    const onScroll = () => {
+    const update = () => {
       const el = wrapperRef.current;
       if (!el) return;
 
       const rect = el.getBoundingClientRect();
       const total = el.offsetHeight - window.innerHeight;
+
       const v = clamp(-rect.top / (total || 1));
-      setRaw(v);
+
+      progressRef.current = v;
+      forceRender((n) => n + 1);
+
+      ticking.current = false;
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    const onScroll = () => {
+      if (!ticking.current) {
+        requestAnimationFrame(update);
+        ticking.current = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    update();
+
+    return () =>
+      window.removeEventListener("scroll", onScroll);
   }, [wrapperRef]);
 
-  return raw;
+  return progressRef.current;
 }
+
+/* EARLY SNAP */
 
 export function useEarlySnap({
   raw,
@@ -34,7 +57,9 @@ export function useEarlySnap({
 }: {
   raw: number;
   textRef: React.RefObject<HTMLElement>;
-  cardRefs: React.MutableRefObject<Record<CardKey, HTMLElement | null>>;
+  cardRefs: React.MutableRefObject<
+    Record<CardKey, HTMLElement | null>
+  >;
   nextSelector: string;
   triggerFrom?: number;
   safeGapPx?: number;
@@ -47,7 +72,8 @@ export function useEarlySnap({
   }, [raw]);
 
   useEffect(() => {
-    const targetEl = () => document.querySelector(nextSelector) as HTMLElement | null;
+    const targetEl = () =>
+      document.querySelector(nextSelector) as HTMLElement | null;
 
     const rectGap = (a: DOMRect, b: DOMRect) => {
       const dx = Math.max(b.left - a.right, a.left - b.right, 0);
@@ -58,38 +84,59 @@ export function useEarlySnap({
     const shouldSnapEarly = () => {
       const textEl = textRef.current;
       if (!textEl) return false;
-      if (!targetEl()) return false;
+
+      const target = targetEl();
+      if (!target) return false;
+
       if (raw < triggerFrom) return false;
 
       const text = textEl.getBoundingClientRect();
-      const cards = Object.values(cardRefs.current).filter(Boolean) as HTMLElement[];
+
+      const cards = Object.values(cardRefs.current).filter(
+        Boolean
+      ) as HTMLElement[];
+
       if (!cards.length) return false;
 
-      const MIN_OVERLAP_PX = 2;
+      const MIN_OVERLAP = 2;
 
       for (const el of cards) {
         const r = el.getBoundingClientRect();
 
-        const overlapW = Math.min(r.right, text.right) - Math.max(r.left, text.left);
-        const overlapH = Math.min(r.bottom, text.bottom) - Math.max(r.top, text.top);
-        const isOverlapping = overlapW > MIN_OVERLAP_PX && overlapH > MIN_OVERLAP_PX;
-        if (isOverlapping) return true;
+        const overlapW =
+          Math.min(r.right, text.right) -
+          Math.max(r.left, text.left);
+
+        const overlapH =
+          Math.min(r.bottom, text.bottom) -
+          Math.max(r.top, text.top);
+
+        const overlapping =
+          overlapW > MIN_OVERLAP && overlapH > MIN_OVERLAP;
+
+        if (overlapping) return true;
 
         const gap = rectGap(r, text);
+
         if (gap < safeGapPx) return true;
       }
+
       return false;
     };
 
     const snapNow = () => {
       if (snappedRef.current || snappingNowRef.current) return;
-      const tEl = targetEl();
-      if (!tEl) return;
+
+      const target = targetEl();
+      if (!target) return;
 
       snappingNowRef.current = true;
       snappedRef.current = true;
 
-      tEl.scrollIntoView({ behavior: 'auto', block: 'start' });
+      target.scrollIntoView({
+        behavior: "auto",
+        block: "start",
+      });
 
       window.setTimeout(() => {
         snappingNowRef.current = false;
@@ -98,11 +145,17 @@ export function useEarlySnap({
 
     const onScroll = () => {
       if (snappedRef.current) return;
+
       if (shouldSnapEarly()) snapNow();
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+
+    return () =>
+      window.removeEventListener("scroll", onScroll);
   }, [raw, textRef, cardRefs, nextSelector, triggerFrom, safeGapPx]);
 }
