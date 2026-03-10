@@ -30,7 +30,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.85;
   }
   50% {
@@ -133,39 +134,68 @@
   display: block;
 }
 
+.scrollIcon {
+  cursor: pointer;
+}
+
+.scroll-dot {
+  animation: scrollMove 1.5s infinite;
+}
+
+@keyframes scrollMove {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(8px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
 /* responsive */
-@media (max-width:991px){
+@media (max-width: 991px) {
+  .spiral-svg {
+    position: absolute;
 
-.spiral-svg{
-position:absolute;
+    left: 0%;
+    top: 50%;
 
-left:0%;
-top:50%;
+    transform: translate(-50%, -50%);
 
-transform:translate(-50%,-50%);
+    width: 140vw;
+    height: 140vh;
 
-width:140vw;
-height:140vh;
-
-min-width:200vw;
-min-height:200vh;
+    min-width: 200vw;
+    min-height: 200vh;
+  }
 }
 
+@media (max-width: 640px) {
+  .spiral-svg {
+    position: absolute;
+
+    left: 0%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 265vw;
+    height: 265vh;
+  }
 }
 
-@media (max-width:640px){
-
-.spiral-svg{
-position:absolute;
-
-left:0%;
-top:50%;
-
-transform:translate(-50%,-50%);
-
-width:265vw;
-height:265vh;
+/* scroll dot bounce */
+.scroll-dot {
+  animation: scrollBounce 1.6s ease-in-out infinite;
 }
 
+@keyframes scrollBounce {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
-
