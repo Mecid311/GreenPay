@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+.section{
+  background: #f7f7f7;
+}
+.wrap {
+  height: 320vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #eeeee8;
+}
+
+.sticky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 85% 80% at 50% 50%, transparent 56%, rgba(215, 216, 208, 0.45) 100%);
+  pointer-events: none;
+  z-index: 60;
+}
+
+.heroText {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.heroH1 {
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.87);
+  letter-spacing: -1px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.fastWord {
+  color: rgba(0, 223, 130, 1);
+}
+.lastLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.card {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
+  will-change: left, top, width, height, border-radius, opacity, transform;
+}
+
+
+@media (max-width: 768px) {
+
+.heroH1 {
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+}

@@ -1,0 +1,443 @@
+.aboutWrap {
+  position: relative;
+  overflow: hidden; 
+}
+
+.rightDecor {
+  position: absolute;
+  right: 0;
+  top: 52%;
+  transform: translateY(-50%);
+
+  width: 657px;       
+  max-width: 45vw;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 0;          
+  opacity: 0.9;
+}
+
+
+/* =========================================
+   1. HERO / ABOUT SECTION
+   ========================================= */
+.section {
+  width: 100%;
+  background: #f7f7f7;
+}
+
+.inner {
+  width: 100%;
+  padding: 224px clamp(24px, 6vw, 120px) 0 clamp(24px, 14vw, 326px);
+}
+
+.contentWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.kickerWrap {
+  position: absolute;
+  top: 11px;
+  left: 207px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kicker {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #111111;
+}
+
+.kickerLine {
+  margin-top: 2px;
+  margin-left: 17px;
+  width: 63px;
+  height: 3px;
+  background: linear-gradient(to right, #00673C 0%, #00CD78 100%);
+}
+
+.textCol {
+  max-width: 850px;
+}
+
+.indent {
+  display: inline-block;
+  width: 184px;
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #111111;
+}
+
+.titleInlineLight {
+  display: inline;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 34px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.lead {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.partners {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 68px;
+}
+
+@media (max-width: 1024px) {
+  .inner {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding-top: 100px;
+  }
+  .kickerWrap {
+    position: static;
+    margin-bottom: 15px;
+  }
+  .indent {
+    display: none;
+  }
+  .title {
+    font-size: 32px;
+  }
+}
+
+.benefitsSection {
+  margin-top: 70px;
+  padding: 100px clamp(24px, 14vw, 326px);
+  background: #ffffff;
+}
+
+
+.benefitsHeading {
+  margin: 0 0 60px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 44px;
+  color: #111;
+}
+
+.benefitsList {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 74px;
+}
+
+.benefitRow {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  column-gap: 46px;
+  align-items: start;
+}
+
+.rowIndent {
+  padding-left: 150px;
+}
+
+.benefitNo {
+  font-weight: 700;
+  font-size: 140px; 
+  line-height: 1;
+  letter-spacing: -2px;
+  color: #0e3322;
+}
+
+.benefitText {
+  padding-top: 18px;
+  max-width: 575px;
+}
+
+.benefitTitle {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.benefitDesc {
+  margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.62);
+}
+
+@media (max-width: 1024px) {
+  .benefitsSection {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .rowIndent {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .benefitRow {
+    grid-template-columns: 170px 1fr;
+    column-gap: 28px;
+  }
+  .benefitNo {
+    font-size: 112px;
+  }
+  .benefitsList {
+    gap: 56px;
+  }
+}
+
+@media (max-width: 640px) {
+  .benefitsSection {
+    margin-top: 56px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+  .benefitsHeading {
+    font-size: 26px;
+    line-height: 34px;
+    margin-bottom: 40px;
+  }
+  .benefitRow {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+  .benefitNo {
+    font-size: 86px;
+  }
+  .benefitText {
+    padding-top: 0;
+  }
+  .benefitsList {
+    gap: 36px;
+  }
+}
+
+.teamSection {
+  padding: 100px clamp(24px, 14vw, 326px) 40px;
+  margin-top: 64px;
+}
+
+.teamWrap {
+  width: 100%;
+  max-width: 1232px;
+  margin: 0 auto;
+}
+
+.teamTop {
+  position: relative;
+  width: 100%;
+  min-height: 475px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(176, 245, 216, 0.10) 0%, rgba(103, 143, 126, 0.59) 100%);
+  margin-bottom: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.ceoCard {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 295px;
+  height: 475px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0px 24px 32px -3px rgba(3, 9, 50, 0.04);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  z-index: 2;
+}
+
+.ceoPhotoWrap {
+  width: 100%;
+  height: 346px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.ceoPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.ceoMeta {
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ceoName {
+  font-weight: 700;
+  font-size: 24px;
+  color: #000000;
+}
+
+.ceoRole {
+  font-weight: 400;
+  font-size: 14px;
+  color: #6c87ae;
+}
+
+.teamInfo {
+  margin-left: 375px;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1;
+}
+
+.teamInfoTitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.teamInfoText {
+  margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.68);
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.personCard {
+  width: 100%;
+  max-width: 295px;
+  margin: 0 auto; 
+  height: 411px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0px 18px 30px rgba(16, 24, 40, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.personHighlight {
+  background: linear-gradient(180deg, #eafff2 0%, #d7f6e8 100%);
+}
+
+.personPhotoWrap {
+  padding: 10px 10px 0;
+}
+
+.personPhoto {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 14px;
+  filter: grayscale(1);
+}
+
+.personMeta {
+  padding: 12px 16px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.personName {
+  font-weight: 700;
+  font-size: 14px;
+  color: #0b0b0b;
+}
+
+.personRole {
+  margin-top: 4px;
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.gridGhost {
+  display: none; 
+}
+
+@media (max-width: 1024px) {
+  .teamSection {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 980px) {
+  .teamTop {
+    flex-direction: column;
+    min-height: auto;
+    background: transparent;
+    margin-bottom: 40px;
+  }
+  
+  .ceoCard {
+    position: static; 
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto 30px auto;
+  }
+  
+  .teamInfo {
+    margin-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .teamSection {
+    padding-top: 60px;
+  }
+  .teamInfoTitle {
+    font-size: 28px;
+  }
+}

@@ -1,0 +1,270 @@
+.section{
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+  padding: 180px 0 56px;
+  overflow: hidden;
+}
+
+.waves{
+  position: absolute;
+  top: 32px;
+  left: 28px;
+  opacity: 0.9;
+}
+
+.container{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+}
+
+.left{
+  flex: 1.05;
+  padding-top: 10px;
+}
+
+.kickerRow{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.kicker{
+  font-size: 14px;
+  font-weight: 500;
+  color: #0a0a0a;
+  letter-spacing: 0.2px;
+}
+
+.kickerLine{
+  width: 48px;
+  height: 2px;
+  background: #11c26f;
+  border-radius: 999px;
+  transform: translateY(1px);
+}
+
+.title{
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.08;
+  font-weight: 700;
+  color: #0a0a0a;
+}
+
+.subTitle{
+  margin: 10px 0 18px;
+  font-size: 18px;
+  color: #0a0a0a;
+  font-weight: 400;
+}
+
+.body{
+  max-width: 560px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(10,10,10,0.60);
+}
+
+.body p{
+  margin: 0 0 14px;
+}
+
+.bodyMuted{
+  margin-top: 6px;
+  color: rgba(10,10,10,0.55);
+}
+
+.right{
+  flex: 0.95;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* green clipped card */
+.formCard{
+  width: 560px;
+  padding: 34px 34px 38px;
+  border-radius: 26px;
+  background: #0b5a3b;
+  position: relative;
+
+  /* top-left "notch" like in screenshot */
+  clip-path: polygon(
+    14% 0%,
+    100% 0%,
+    100% 100%,
+    0% 100%,
+    0% 18%,
+    6% 12%,
+    10% 6%
+  );
+
+  box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
+
+/* subtle darker arcs inside card */
+.formCard::before{
+  content:"";
+  position:absolute;
+  inset:-40px -80px auto auto;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(0,0,0,0.22),
+    rgba(0,0,0,0.00) 70%
+  );
+  filter: blur(1px);
+  opacity: 0.45;
+}
+
+.formCard::after{
+  content:"";
+  position:absolute;
+  top: -110px;
+  right: -140px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  border: 34px solid rgba(0,0,0,0.12);
+  opacity: 0.25;
+}
+
+.form{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input, .textarea{
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #1a1a1a;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+}
+
+.input::placeholder,
+.textarea::placeholder{
+  color: rgba(26,26,26,0.45);
+}
+
+.textarea{
+  min-height: 74px;
+  resize: none;
+  padding-top: 16px;
+}
+
+.button{
+  margin-top: 6px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid rgba(255,255,255,0.75);
+  color: #ffffff;
+  background: transparent;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.button:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.90);
+}
+
+.btnIcon{
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.45);
+  display: grid;
+  place-items: center;
+}
+
+/* bottom strip text */
+.bottomLine{
+  margin: 60px auto 0;
+  max-width: 1180px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: rgba(10,10,10,0.35);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dot{
+  transform: translateY(-2px);
+}
+
+.green{
+  color: #11c26f;
+}
+
+/* responsive */
+@media (max-width: 1024px){
+  .container{
+    flex-direction: column;
+    gap: 26px;
+  }
+  .right{
+    justify-content: flex-start;
+  }
+  .formCard{
+    width: 100%;
+    max-width: 640px;
+  }
+  .bottomLine{
+    font-size: 26px;
+    gap: 10px;
+  }
+  .title{
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 560px){
+  .section{
+    padding: 56px 0 46px;
+  }
+  .title{
+    font-size: 30px;
+  }
+  .subTitle{
+    font-size: 16px;
+  }
+  .formCard{
+    padding: 22px 18px 24px;
+    border-radius: 22px;
+  }
+  .bottomLine{
+    font-size: 20px;
+  }
+}
