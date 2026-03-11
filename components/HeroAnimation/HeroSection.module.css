@@ -1,0 +1,248 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background: #0b2d1c;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.spiralWrap {
+  position: absolute;
+  left: -15%;
+  top: -25%;
+  width: 80%;
+  height: 150%;
+  z-index: 1;
+  pointer-events: none;
+  transform-origin: center center;
+  animation: groupAnim 9s ease-in-out infinite;
+}
+
+.spiralImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logoWrap {
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  width: 30vw;
+  max-width: 400px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  z-index: 2;
+  pointer-events: none;
+  animation: logoAnimFull 9s ease-in-out infinite;
+}
+
+.logoWrap > * {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.textContent {
+  position: relative;
+  z-index: 3;
+  max-width: 46%;
+  padding-right: 6%;
+}
+
+.subtitle {
+  font-size: clamp(0.82rem, 1.15vw, 1.375rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.68);
+  letter-spacing: 0.02em;
+  margin: 0 0 40px;
+  position: relative;
+  width: fit-content;
+}
+
+.subtitle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -9px;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 201, 122, 0) 0%,
+    #20c97a 50%,
+    rgba(32, 201, 122, 0) 100%
+  );
+}
+
+.headline {
+  font-size: clamp(1.7rem, 3.6vw, 3.1rem);
+  font-weight: 500;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1.13;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.scrollIndicator {
+  position: absolute;
+  right: 28px;
+  bottom: 48px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.scrollText {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.scrollMouse {
+  cursor: pointer;
+  width: 22px;
+  height: auto;
+}
+
+.scrollDot {
+  animation: scrollDotMove 2s ease-in-out infinite;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes groupAnim {
+  0%,12% {
+    transform: rotate(0deg) scale(1);
+    filter: brightness(1) saturate(1);
+  }
+  28%,40% {
+    transform: rotate(-14deg) scale(0.85);
+    filter: brightness(1.9) saturate(0.35);
+  }
+  56%,68% {
+    transform: rotate(11deg) scale(0.85);
+    filter: brightness(1.9) saturate(0.35);
+  }
+  84%,100% {
+    transform: rotate(0deg) scale(1);
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes logoAnimFull {
+  0%,12% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    filter: brightness(1) saturate(1);
+  }
+  28%,40% {
+    transform: translate(-50%, -50%) rotate(-14deg) scale(0.85);
+    filter: brightness(1.4) saturate(0.85);
+  }
+  56%,68% {
+    transform: translate(-50%, -50%) rotate(11deg) scale(0.85);
+    filter: brightness(1.4) saturate(0.85);
+  }
+  84%,100% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes scrollDotMove {
+  0%,100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(20px);
+    opacity: 0.12;
+  }
+}
+
+@media (max-width: 1024px) {
+  .spiralWrap {
+    width: 85%;
+  }
+  .logoWrap {
+    left: 28%;
+    width: 35vw;
+  }
+  .textContent {
+    max-width: 55%;
+    padding-right: 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 80px;
+  }
+  .spiralWrap {
+    width: 120%;
+    left: -20%;
+    top: -25%;
+  }
+  .logoWrap {
+    left: 50%;
+    top: 35%;
+    width: 45vw;
+    max-width: 280px;
+  }
+  .textContent {
+    max-width: 90%;
+    padding: 0;
+    text-align: center;
+  }
+  .subtitle {
+    margin: 0 auto 30px auto;
+  }
+  .scrollIndicator {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    text-align: center;
+  }
+  .spiralWrap {
+    width: 160%;
+    left: -35%;
+    top: -20%;
+  }
+  .logoWrap {
+    top: 32%;
+    width: 60vw;
+  }
+  .textContent {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  .headline {
+    line-height: 1.2;
+  }
+}

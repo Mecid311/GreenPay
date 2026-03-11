@@ -1,13 +1,19 @@
 export type SpiralHeroResponse = {
-  title?: string;
   subtitle?: string;
+  titleLine1?: string;
+  titleLine2?: string;
   scrollText?: string;
-  spiralSvgSrc?: string;
+  spiralImageSrc?: string;
+  logoImageSrc?: string;
+  logoAlt?: string;
 };
 
 export const defaultSpiralHeroContent: Required<SpiralHeroResponse> = {
-  title: "BÜTÜN ÖDƏNİŞLƏRİNİZ ÜÇÜN VAHİD HESAB",
   subtitle: "İntellektual ödəniş sistemi",
+  titleLine1: "BÜTÜN ÖDƏNİŞLƏRİNİZ",
+  titleLine2: "ÜÇÜN VAHİD HESAB",
   scrollText: "SCROLL",
-  spiralSvgSrc: "/images/spiral/spiral-hero.svg",
+  spiralImageSrc: "/images/spiral.svg",
+  logoImageSrc: "/images/logo.svg",
+  logoAlt: "logo",
 };
