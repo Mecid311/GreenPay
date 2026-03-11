@@ -199,3 +199,125 @@
     opacity: 1;
   }
 }
+
+/* Test-1 */
+
+/* .spiral-breathe {
+  will-change: filter, opacity;
+  animation: spiral-color 6s ease-in-out infinite;
+}
+
+@keyframes spiral-color {
+  0%   { filter: hue-rotate(0deg)   brightness(0.7); opacity: 0.85; }
+  33%  { filter: hue-rotate(40deg)  brightness(1.1); opacity: 1;    }
+  66%  { filter: hue-rotate(-20deg) brightness(0.9); opacity: 0.9;  }
+  100% { filter: hue-rotate(0deg)   brightness(0.7); opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spiral-breathe {
+    animation: none;
+    opacity: 0.85;
+  }
+} */
+
+
+/* Test-2 */
+/* 
+.spiral-breathe {
+  will-change: opacity;
+  animation: spiral-breathe 4.189s ease-in-out infinite;
+}
+
+@keyframes spiral-breathe {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spiral-breathe {
+    animation: none;
+    opacity: 0.6;
+  }
+} */
+
+/* 
+.spiral-breathe {
+  will-change: filter, opacity;
+  animation: spiral-blur-fade 5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes spiral-blur-fade {
+  0%   { filter: blur(6px); opacity: 0.2; }
+  40%  { filter: blur(0px); opacity: 1;   }
+  70%  { filter: blur(0px); opacity: 0.95;}
+  100% { filter: blur(6px); opacity: 0.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spiral-breathe {
+    animation: none;
+    filter: blur(0px);
+    opacity: 0.85;
+  }
+} */
+
+/* 
+.spiral-breathe {
+  will-change: filter, opacity;
+  animation: spiral-chroma 5s ease-in-out infinite;
+}
+
+@keyframes spiral-chroma {
+  0%   { filter: hue-rotate(0deg)   brightness(0.7); opacity: 0.5; }
+  50%  { filter: hue-rotate(50deg)  brightness(1.3); opacity: 1;   }
+  100% { filter: hue-rotate(0deg)   brightness(0.7); opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spiral-breathe {
+    animation: none;
+    opacity: 0.85;
+    filter: none;
+  }
+} */
+
+
+/* ── Spiral Color Overlay ─────────────────────────────────────────────────── */
+.spiral-breathe {
+  will-change: filter, opacity, transform;
+  transform-origin: center;
+  animation: spiral-wave 6s ease-in-out infinite;
+}
+
+@keyframes spiral-wave {
+  0%   { 
+    filter: brightness(0.8);
+    opacity: 0.5;
+    transform: scale(0.97) rotate(-1deg);
+  }
+  50%  { 
+    filter: brightness(1.4);
+    opacity: 1;
+    transform: scale(1.03) rotate(1deg);
+  }
+  100% { 
+    filter: brightness(0.8);
+    opacity: 0.5;
+    transform: scale(0.97) rotate(-1deg);
+  }
+}
+/* ── Reduced Motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .spiral-breathe {
+    animation: none;
+    opacity: 0.85;
+    filter: none;
+  }
+  .spiral-color-overlay {
+    animation: none;
+    background: #21422F;
+    opacity: 0.6;
+  }
+}
