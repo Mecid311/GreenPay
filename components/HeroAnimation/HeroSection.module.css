@@ -1,33 +1,19 @@
-/* ==========================================================
-   HeroSection.module.css  —  birəbir screenshot
-   ========================================================== */
-
-/* ── Sıfırlama: body/html tam ekran ─────────────────────────
-   Next.js layotu bunu edir, amma ehtiyat üçün qeyd:
-   html, body { margin:0; padding:0; overflow-x:hidden }
-   ──────────────────────────────────────────────────────────── */
-
 .hero {
   position: relative;
-  width: 100vw;          /* viewport genişliyi — parent-dən asılı deyil */
-  height: 100vh;         /* viewport hündürlüyü */
+  width: 100vw;
+  height: 100vh;
   min-height: 600px;
   background: #0b2d1f;
   overflow: hidden;
   display: flex;
-  align-items: flex-end; /* mətn aşağı-sol — screenshot ilə uyğun */
+  align-items: flex-end;
   box-sizing: border-box;
 }
 
-/* ── Arxa radial gradient ────────────────────────────────── */
 .bgBase {
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* Screenshot analizi:
-     - Sağ-orta: parlaq yaşıl (#1d6040) — logo arxası
-     - Sol-aşağı: orta yaşıl (#143d26)
-     - Ümumi fon: tünd yaşıl (#0b2d1f)            */
   background:
     radial-gradient(ellipse 65% 80% at 78% 48%, #1a5538 0%, transparent 55%),
     radial-gradient(ellipse 50% 60% at 10% 70%, #163b28 0%, transparent 50%),
@@ -35,36 +21,12 @@
     #0c2e20;
 }
 
-/* ==========================================================
-   SPIRAL SVG — TAM EKRAN
-   
-   Açar məntiq:
-   ─────────────
-   .spiralWrapper  → position:absolute, inset:0
-                     animasiya YOXDUR (transform context yaratmır)
-                     overflow:hidden (spiral kənara çıxmır)
-   
-   .spiralSvg      → position:absolute, inset:0
-                     width:100%, height:100%
-                     preserveAspectRatio="xMidYMax slice" (TSX-də)
-                       → SVG aşağıdan doldurur, aspect ratio qorumur
-                          bütün ekranı örtür
-                     animasiya BURADAdir — GPU composite layer
-   
-   GPU optimallaşdırma:
-   ─────────────────────
-   will-change:transform → browser öncədən GPU layer açır
-   translateZ(0)         → hardware acceleration force
-   YALNIZ transform      → composite-only, CPU iştirak etmir
-   ========================================================== */
-
 .spiralWrapper {
   position: absolute;
-  inset: 0;                 /* top:0 right:0 bottom:0 left:0 */
+  inset: 0;
   z-index: 2;
   pointer-events: none;
   overflow: hidden;
-  /* ANIMASIYA YOXDUR — transform context problemi yaranmasın */
 }
 
 .spiralSvg {
@@ -78,60 +40,48 @@
 }
 
 
-/* ── Glow path ───────────────────────────────────────────
-   filter burada yoxdur — SVG animate elementi işləyir.
-   CSS filter animated SVG-də hər frame re-rasterize edir.
-   ──────────────────────────────────────────────────────── */
-.glowPath {
-  /* intentionally empty — parıltı SVG glowGrad ilə verilir */
-}
-
-/* ==========================================================
-   CONTENT  —  screenshot: aşağı-sol, ekranın ~55%-dən
-   ========================================================== */
-
 .content {
   position: absolute;
-  bottom: 14vh;            /* aşağıdan boşluq — screenshot ilə uyğun */
+  bottom: 14vh;
   left: 0;
   z-index: 10;
   padding-left: 5vw;
-  /* max-width YALNIZ mətn üçündür — spiral ilə əlaqəsi yoxdur */
   max-width: 55%;
   animation: fadeUp 0.8s ease-out both;
 }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px) translateZ(0); }
-  to   { opacity: 1; transform: translateY(0)    translateZ(0); }
+  to   { opacity: 1; transform: translateY(0) translateZ(0); }
 }
 
-/* eyebrow — "İntellektual ödəniş sistemi" xətti altında */
 .eyebrow {
-  display: flex;
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: rgba(255, 255, 255, 0.68);
-  font-family: "Montserrat", "Segoe UI", sans-serif;
-  font-size: clamp(0.68rem, 0.85vw, 0.85rem);
+  font-size: clamp(0.68rem, 1.375vw, 1.375rem);
   font-weight: 400;
   letter-spacing: 0.04em;
-  margin: 0 0 10px;
+  margin: 0 0 14px;
 }
 
-/* Qısa yaşıl xətt eyebrow-un solunda */
-.eyebrowLine {
-  display: inline-block;
-  width: 24px;
+.eyebrow::after {
+  content: "";
+  display: block;
+  width: 48px;
   height: 2px;
-  background: #3ddc84;
-  border-radius: 2px;
-  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 201, 122, 0) 0%,
+    #20c97a 50%,
+    rgba(32, 201, 122, 0) 100%
+  );
+  border-radius: 1px;
 }
 
-/* Böyük başlıq */
 .heading {
-  font-family: "Montserrat", "Segoe UI", sans-serif;
   font-size: clamp(2rem, 4.2vw, 3.4rem);
   font-weight: 800;
   line-height: 1.08;
@@ -141,15 +91,10 @@
   margin: 0;
 }
 
-/* ==========================================================
-   LOGO  —  screenshot: sağda, vertikal mərkəz
-   x: ekranın ~78%-də, y: ~50%
-   ========================================================== */
-
 .logoWrapper {
   position: absolute;
   right: 8vw;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%) translateZ(0);
   z-index: 10;
   filter:
@@ -159,7 +104,7 @@
 }
 
 .logo {
-  width: clamp(140px, 13vw, 220px) !important;
+  width: clamp(180px, 23vw, 480px) !important;
   height: auto !important;
   display: block;
 }
@@ -169,9 +114,10 @@
   to   { opacity: 1; transform: translateY(-50%) scale(1) translateZ(0); }
 }
 
-/* ==========================================================
-   SCROLL INDICATOR  —  screenshot: sağ kənar, aşağı
-   ========================================================== */
+@keyframes logoRevealMobile {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9) translateZ(0); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1) translateZ(0); }
+}
 
 .scrollIndicator {
   position: absolute;
@@ -200,81 +146,108 @@
 }
 
 @keyframes scrollWheelAnim {
-  0%   { opacity: 1; transform: translateY(0)    translateZ(0); }
+  0%   { opacity: 1; transform: translateY(0) translateZ(0); }
   65%  { opacity: 0; transform: translateY(12px) translateZ(0); }
-  66%  { opacity: 0; transform: translateY(0)    translateZ(0); }
-  100% { opacity: 1; transform: translateY(0)    translateZ(0); }
+  66%  { opacity: 0; transform: translateY(0) translateZ(0); }
+  100% { opacity: 1; transform: translateY(0) translateZ(0); }
 }
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
+@media (max-width: 1440px) {
+  .content {
+    max-width: 60%;
+  }
+}
 
-/* Tablet */
 @media (max-width: 1024px) {
   .content {
-    max-width: 65%;
+    max-width: 70%;
     bottom: 12vh;
+    padding-left: 6vw;
   }
   .logoWrapper {
-    right: 4vw;
+    right: 5vw;
   }
 }
 
-/* Mobil */
 @media (max-width: 768px) {
   .hero {
-    align-items: center;
+    align-items: flex-start;
   }
-
-  .content {
-    position: relative;   /* absolute-dan çıxır, flex ilə mərkəzlənir */
-    bottom: auto;
-    left: auto;
-    max-width: 90%;
-    padding: 0 5vw;
-    margin-top: auto;
-    padding-top: 45vw;    /* logo-nun altına keçir */
-  }
-
   .logoWrapper {
     right: auto;
     left: 50%;
-    top: 12vh;
+    top: 15vh;
     transform: translateX(-50%) translateZ(0);
+    animation: logoRevealMobile 1s ease-out 0.15s both;
   }
-
   .logo {
-    width: clamp(100px, 35vw, 160px) !important;
+    width: clamp(140px, 35vw, 180px) !important;
   }
-
+  .content {
+    position: relative;
+    bottom: auto;
+    left: 0;
+    max-width: 100%;
+    width: 100%;
+    padding: 0 5vw;
+    margin-top: 42vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
   .heading {
-    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    font-size: clamp(2rem, 6.5vw, 2.8rem);
   }
-
   .scrollIndicator {
-    right: 0.8rem;
-    bottom: 2.5rem;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 2rem;
   }
 }
 
-/* Kiçik mobil */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
+  .logoWrapper {
+    top: 12vh;
+  }
+  .content {
+    margin-top: 38vh;
+  }
+  .logo {
+    width: clamp(120px, 45vw, 150px) !important;
+  }
+  .heading {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .content {
+    margin-top: 35vh;
+  }
   .heading {
     font-size: 1.5rem;
   }
+  .scrollIndicator {
+    bottom: 1.5rem;
+  }
 }
 
-/* Azaldılmış hərəkət — accessibility + batareya */
 @media (prefers-reduced-motion: reduce) {
   .spiralSvg,
   .scrollWheel,
   .logoWrapper,
-  .content {
+  .content,
+  .scrollIndicator {
     animation: none !important;
-    transform: none !important;
   }
   .logoWrapper {
     transform: translateY(-50%) translateZ(0) !important;
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .logoWrapper {
+    transform: translateX(-50%) translateZ(0) !important;
   }
 }

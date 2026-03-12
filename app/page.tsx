@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <SpiralHero  />
+        <SpiralHero scrollToRef={heroRef} />
         <div ref={heroRef}>
           <Hero />
         </div>
