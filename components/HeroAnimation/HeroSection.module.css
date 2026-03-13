@@ -96,9 +96,6 @@
   top: 55%;
   transform: translateY(-50%) translateZ(0);
   z-index: 10;
-  filter:
-    drop-shadow(0 4px 32px rgba(0, 0, 0, 0.45))
-    drop-shadow(0 0 40px rgba(40, 200, 110, 0.25));
   animation: logoReveal 1s ease-out 0.15s both;
 }
 

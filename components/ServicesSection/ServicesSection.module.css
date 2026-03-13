@@ -65,8 +65,7 @@
   object-fit: contain;
   object-position: right top;
   opacity: 0.9;
-  filter: drop-shadow(0 0 18px rgba(0, 255, 160, 0.12));
-  animation: waveFloat 6s ease-in-out infinite;
+  animation: waveFloat 4s ease-in-out infinite;
 }
 
 @keyframes waveFloat {

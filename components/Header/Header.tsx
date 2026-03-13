@@ -5,7 +5,7 @@ import Link from "next/link";
 import styles from "./Header.module.css";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { House } from "lucide-react";
+import { House, Menu, X } from "lucide-react";
 import { Roboto } from "next/font/google";
 
 import {
@@ -23,17 +23,68 @@ const roboto = Roboto({
 
 export default function Header() {
   const [apiData, setApiData] = useState<HeaderResponse | null>(null);
+  const [showTopNav, setShowTopNav] = useState(true);
+  const [showBottomNav, setShowBottomNav] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
   useEffect(() => {
     const loadContent = async () => {
-      const data = await fetchHeaderContent();
-      setApiData(data);
+      try {
+        const data = await fetchHeaderContent();
+        setApiData(data);
+      } catch (error) {
+        console.error("Header content fetch failed:", error);
+      }
     };
 
     loadContent();
   }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const updateNavState = () => {
+      if (!isHomePage) {
+        setShowTopNav(true);
+        setShowBottomNav(true);
+        return;
+      }
+
+      const hero =
+        document.querySelector<HTMLElement>("#hero") ||
+        document.querySelector<HTMLElement>("[data-hero='true']") ||
+        document.querySelector<HTMLElement>("[data-section='hero']") ||
+        document.querySelector<HTMLElement>(".hero");
+
+      if (!hero) {
+        const passedFallback = window.scrollY > window.innerHeight * 0.7;
+        setShowTopNav(!passedFallback);
+        setShowBottomNav(passedFallback);
+        return;
+      }
+
+      const heroBottom = hero.offsetTop + hero.offsetHeight;
+      const passedHero = window.scrollY + 100 >= heroBottom;
+
+      setShowTopNav(!passedHero);
+      setShowBottomNav(passedHero);
+    };
+
+    updateNavState();
+
+    window.addEventListener("scroll", updateNavState, { passive: true });
+    window.addEventListener("resize", updateNavState);
+
+    return () => {
+      window.removeEventListener("scroll", updateNavState);
+      window.removeEventListener("resize", updateNavState);
+    };
+  }, [isHomePage]);
 
   const content = useMemo(() => {
     const apiNavItems = apiData?.navItems;
@@ -74,7 +125,7 @@ export default function Header() {
       <div className={styles.container}>
         <div
           className={`${styles.topBar} ${
-            isHomePage ? styles.topBarTransparent : styles.topBarSolid
+            showTopNav ? styles.topBarVisible : styles.topBarHidden
           }`}
         >
           <Link href="/" className={styles.brand}>
@@ -93,7 +144,33 @@ export default function Header() {
             </span>
           </Link>
 
+          <nav className={styles.topNavLinks} aria-label="Main navigation">
+            {content.navItems.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={isActive ? styles.activeTopLink : ""}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
           <div className={styles.topActions}>
+            <button
+              type="button"
+              className={styles.menuBtn}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+
             <button
               className={styles.langBtn}
               aria-label="Change language"
@@ -119,7 +196,33 @@ export default function Header() {
           </div>
         </div>
 
-        <div className={styles.bottomNavWrap}>
+        <div
+          className={`${styles.mobileMenu} ${
+            isMobileMenuOpen ? styles.mobileMenuOpen : styles.mobileMenuClosed
+          }`}
+        >
+          <nav className={styles.mobileMenuLinks} aria-label="Mobile navigation">
+            {content.navItems.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={isActive ? styles.activeMobileLink : ""}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div
+          className={`${styles.bottomNavWrap} ${
+            showBottomNav ? styles.bottomNavVisible : styles.bottomNavHidden
+          }`}
+        >
           <nav className={styles.bottomNav}>
             <Link
               href="/"

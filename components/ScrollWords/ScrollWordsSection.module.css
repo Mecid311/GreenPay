@@ -1,8 +1,10 @@
 .section {
   position: relative;
   width: 100%;
-  height: 500vh;
+  /* Scroll məsafəsini mobil üçün bir qədər qısaldırıq */
+  height: clamp(260vh, 300vh, 300vh);
   background: #f2f2ef;
+  overflow: clip;
 }
 
 .sticky {
@@ -16,159 +18,89 @@
   justify-content: center;
 }
 
-.canvas {
+.centerStack {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  padding: 0 8vw;
+  max-width: 980px;
+  /* Kənarlardan boşluqlar mobilə doğru kiçilir */
+  padding: 0 clamp(20px, 4vw, 24px);
   display: flex;
   flex-direction: column;
-  gap: 5vh;
+  align-items: center;
+  /* Elementlər arası məsafə (gap) tam responsivdir */
+  gap: clamp(24px, 5vw, 56px);
 }
 
-.wordBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
+.wordItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 18px);
   will-change: transform, opacity;
 }
 
-.wordBlock.left {
-  align-items: flex-start;
-}
-
-.wordBlock.right {
-  align-items: flex-end;
-}
-
-.wordRow {
+.iconBox {
+  /* Qutu ölçüləri dərhal reaksiyaya girir */
+  width: clamp(44px, 6vw, 66px);
+  height: clamp(44px, 6vw, 66px);
+  border-radius: clamp(10px, 1.5vw, 14px);
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-.bullet {
-  font-size: clamp(1.4rem, 2.2vw, 2rem);
-  color: #0b3b29;
-  line-height: 1;
+  justify-content: center;
   flex-shrink: 0;
 }
 
 .wordText {
-  font-size: clamp(3rem, 7.5vw, 7rem);
+  /* Mətn ekran kiçildikcə 24px-ə qədər düşəcək, böyüdükcə 86px olacaq */
+  font-size: clamp(24px, 7.5vw, 86px);
+  line-height: 0.95;
   font-weight: 800;
-  color: #0b3b29;
-  letter-spacing: -0.025em;
-  line-height: 1;
+  letter-spacing: -0.05em;
   text-transform: uppercase;
+  text-align: center;
 }
 
-.italic .wordText {
+.italic {
   font-style: italic;
   font-weight: 700;
 }
 
-.underlineWrap {
-  width: 70%;
-  height: 2px;
-  overflow: visible;
-}
-
-.wordBlock.right .underlineWrap {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.underline {
-  width: 70%;
-  height: 2px;
-  border-radius: 999px;
-  transform: scaleX(0);
-  transform-origin: left center;
-
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(45, 160, 90, 0.4) 20%,
-    rgba(45, 160, 90, 1) 50%,
-    rgba(45, 160, 90, 0.4) 80%,
-    transparent 100%
-  );
-
-  filter: drop-shadow(0 0 6px rgba(45, 160, 90, 0.35));
-  animation: underlinePulse 1.8s ease-in-out infinite;
-}
-
-.wordBlock.right .underline {
-  transform-origin: right center;
-}
-
-@keyframes underlinePulse {
-  0% {
-    opacity: 0.35;
-    filter: drop-shadow(0 0 3px rgba(45, 160, 90, 0.18));
-  }
-  50% {
-    opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(45, 160, 90, 0.55));
-  }
-  100% {
-    opacity: 0.35;
-    filter: drop-shadow(0 0 3px rgba(45, 160, 90, 0.18));
-  }
-}
-
-.scrollHint {
+.topWave,
+.bottomWave {
   position: absolute;
-  bottom: 2.5rem;
-  left: 8vw;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  transition: opacity 0.4s ease;
+  z-index: 1;
   pointer-events: none;
+  /* Mobildə daha şəffaf olacaq */
+  opacity: clamp(0.75, 5vw, 0.9);
 }
 
-.scrollHint span {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #0b3b29;
-  opacity: 0.5;
+.topWave {
+  /* Orijinal şaquli mövqeyi qaytarırıq ki, kəsilməsin */
+  top: -1060px;
+  right: 0;
+  /* Genişlik responsiv olaraq qalır (ekran kiçildikcə kiçiləcək) */
+  width: clamp(280px, 54vw, 760px); 
 }
 
-.scrollLine {
-  width: 1px;
-  height: 2.5rem;
-  background: #0b3b29;
-  opacity: 0.3;
-  animation: scrollPulse 1.6s ease-in-out infinite;
+.bottomWave {
+  left: 0;
+  /* Orijinal şaquli mövqeyi qaytarırıq */
+  bottom: -970px;
+  width: clamp(300px, 58vw, 760px);
 }
 
-@keyframes scrollPulse {
-  0%,
-  100% {
-    transform: scaleY(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scaleY(0.5);
-    opacity: 0.1;
-  }
+.topWave svg,
+.bottomWave svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-@media (max-width: 600px) {
-  .canvas {
-    padding: 0 6vw;
-    gap: 4vh;
-  }
-
-  .wordRow {
-    gap: 0.7rem;
-  }
-
-  .underlineWrap,
-  .underline {
-    width: 80px;
-  }
+.wavePath {
+  stroke: rgba(125, 160, 145, 0.42);
+  /* Xəttin qalınlığı da responsiv oldu */
+  stroke-width: clamp(2px, 0.3vw, 2.5px);
+  stroke-linecap: round;
+  fill: none;
 }
