@@ -39,7 +39,6 @@
   transform: translateZ(0);
 }
 
-
 .content {
   position: absolute;
   bottom: 14vh;
@@ -82,9 +81,9 @@
 }
 
 .heading {
-  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.05;
   letter-spacing: 0.015em;
   color: #ffffff;
   text-transform: uppercase;
@@ -104,7 +103,7 @@
 }
 
 .logo {
-  width: clamp(180px, 23vw, 480px) !important;
+  width: clamp(220px, 28vw, 520px) !important;
   height: auto !important;
   display: block;
 }
@@ -115,8 +114,8 @@
 }
 
 @keyframes logoRevealMobile {
-  from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9) translateZ(0); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1) translateZ(0); }
+  from { opacity: 0; transform: translateY(20px) scale(0.9) translateZ(0); }
+  to   { opacity: 1; transform: translateY(0) scale(1) translateZ(0); }
 }
 
 .scrollIndicator {
@@ -152,17 +151,10 @@
   100% { opacity: 1; transform: translateY(0) translateZ(0); }
 }
 
-@media (max-width: 1440px) {
-  .content {
-    max-width: 60%;
-  }
-}
-
 @media (max-width: 1024px) {
   .content {
     max-width: 70%;
     bottom: 12vh;
-    padding-left: 6vw;
   }
   .logoWrapper {
     right: 5vw;
@@ -171,65 +163,61 @@
 
 @media (max-width: 768px) {
   .hero {
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5vw;
   }
-  .logoWrapper {
-    right: auto;
-    left: 50%;
-    top: 15vh;
-    transform: translateX(-50%) translateZ(0);
-    animation: logoRevealMobile 1s ease-out 0.15s both;
-  }
-  .logo {
-    width: clamp(140px, 35vw, 180px) !important;
-  }
+
   .content {
     position: relative;
     bottom: auto;
-    left: 0;
+    left: auto;
     max-width: 100%;
-    width: 100%;
-    padding: 0 5vw;
-    margin-top: 42vh;
+    padding: 0;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    order: 1;
   }
+
+  .logoWrapper {
+    position: relative;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    order: 2;
+    display: flex;
+    justify-content: center;
+    animation: logoRevealMobile 1s ease-out 0.15s both;
+  }
+
+  .logo {
+    width: clamp(180px, 50vw, 240px) !important;
+  }
+
   .heading {
-    font-size: clamp(2rem, 6.5vw, 2.8rem);
+    font-size: clamp(2.4rem, 8vw, 3.2rem);
   }
+
   .scrollIndicator {
-    right: 50%;
-    transform: translateX(50%);
+    right: 1.2rem;
     bottom: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .logoWrapper {
-    top: 12vh;
-  }
   .content {
-    margin-top: 38vh;
+    margin-bottom: 30px;
   }
   .logo {
-    width: clamp(120px, 45vw, 150px) !important;
+    width: 60vw !important;
   }
   .heading {
-    font-size: 1.8rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .content {
-    margin-top: 35vh;
-  }
-  .heading {
-    font-size: 1.5rem;
-  }
-  .scrollIndicator {
-    bottom: 1.5rem;
+    font-size: 2.2rem;
   }
 }
 
@@ -240,14 +228,5 @@
   .content,
   .scrollIndicator {
     animation: none !important;
-  }
-  .logoWrapper {
-    transform: translateY(-50%) translateZ(0) !important;
-  }
-}
-
-@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
-  .logoWrapper {
-    transform: translateX(-50%) translateZ(0) !important;
   }
 }
