@@ -129,18 +129,16 @@ export default function Header() {
           }`}
         >
           <Link href="/" className={styles.brand}>
-            <img
+            <Image
               src={content.brandLogoSrc}
               alt={content.brandLogoAlt}
-              width={37}
-              height={47}
+              width={120} 
+              height={150} 
               className={styles.brandLogo}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              draggable={false}
+              priority 
+              quality={100} 
             />
-
+             
             <span className={styles.brandText}>
               <span>{content.brandTextTop}</span>
               <span>{content.brandTextBottom}</span>
@@ -204,7 +202,10 @@ export default function Header() {
             isMobileMenuOpen ? styles.mobileMenuOpen : styles.mobileMenuClosed
           }`}
         >
-          <nav className={styles.mobileMenuLinks} aria-label="Mobile navigation">
+          <nav
+            className={styles.mobileMenuLinks}
+            aria-label="Mobile navigation"
+          >
             {content.navItems.map((item) => {
               const isActive = pathname === item.href;
 

@@ -19,13 +19,13 @@ export const defaultHeroContent: {
 } = {
   titleLine1: "Biznesiniz üçün",
   fastWord: "sürətli",
-  titleLine2AfterFastWord: "və təhlükəsiz",
-  lastLine: "ödənişlər",
+  titleLine2AfterFastWord: "və",
+  lastLine: "təhlükəsiz ödənişlər",
   cardImages: {
-    payment: "/images/cards/payment.png",
-    champion: "/images/cards/champion.png",
-    cart: "/images/cards/cart.png",
-    shop3d: "/images/cards/shop3d.png",
-    supreme: "/images/cards/supreme.png",
+    payment: "/images/cards/card-1.jpeg",
+    champion: "/images/cards/card-2.jpeg",
+    cart: "/images/cards/card-3.jpeg",
+    shop3d: "/images/cards/card-4.jpeg",
+    supreme: "/images/cards/card-2.jpeg",
   },
 };

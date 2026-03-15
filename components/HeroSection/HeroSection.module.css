@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
-
-.section{
+.section {
   background: #f7f7f7;
 }
+
 .wrap {
   height: 320vh;
 }
@@ -17,52 +16,74 @@
 }
 
 .sticky::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: #f7f7f7;
+  background: transparent;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 .heroText {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
+  width: min(92vw, 1100px);
   text-align: center;
   z-index: 30;
   pointer-events: none;
 }
 
 .heroH1 {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   font-weight: 900;
+  font-size: clamp(18px, 3.5vw, 46px);
   color: rgba(0, 0, 0, 0.87);
-  letter-spacing: -1px;
-  line-height: 1;
-  display: inline-block;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+}
+
+.line1,
+.line2 {
+  display: block;
+  white-space: nowrap;
 }
 
 .fastWord {
   color: rgba(0, 223, 130, 1);
 }
+
 .lastLine {
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
-
 .card {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   will-change: left, top, width, height, border-radius, opacity, transform;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 24px;
 }
 
+.cardImg {
+  object-fit: cover;
+  object-position: center;
+  border-radius: 24px;
+}
 
 @media (max-width: 768px) {
+  .heroText {
+    width: min(94vw, 94vw);
+  }
 
-.heroH1 {
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-}
-
+  .heroH1 {
+    font-size: clamp(16px, 4.8vw, 28px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    gap: 4px;
+  }
 }

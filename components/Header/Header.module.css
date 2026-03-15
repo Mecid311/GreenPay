@@ -92,12 +92,13 @@
   flex-shrink: 0;
   min-width: 0;
 }
-
 .brandLogo {
   display: block;
-  width: 37px;
-  height: 47px;
+  width: 45px; 
+  height: auto;
   flex-shrink: 0;
+  image-rendering: -webkit-optimize-contrast; 
+  image-rendering: crisp-edges;
 }
 
 .brandText {
@@ -638,8 +639,8 @@
   }
 
   .brandLogo {
-    width: 30px;
-    height: 38px;
+    width: 40px; 
+    height: auto;
   }
 
   .menuBtn {
@@ -725,8 +726,8 @@
   }
 
   .brandLogo {
-    width: 26px;
-    height: 33px;
+    width: 35px; 
+    height: auto;
   }
 
   .menuBtn {

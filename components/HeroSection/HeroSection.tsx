@@ -39,24 +39,53 @@ const roboto = Roboto({
   display: "swap",
 });
 
+type ImageMeta = {
+  ratio: number;
+  orientation: "portrait" | "landscape" | "square";
+};
+
 const rectStyle = (
   rc: Rect,
   extra?: CSSProperties
 ): CSSProperties => ({
   position: "absolute",
-
   width: `${rc.w}vw`,
   height: `${rc.h}vh`,
-
   borderRadius: `${rc.r}px`,
   overflow: "hidden",
-
   transform: `translate3d(${rc.x}vw, ${rc.y}vh, 0)`,
-
   willChange: "transform",
-
   ...extra,
 });
+
+function reshapeRectForImage(rect: Rect, meta?: ImageMeta): Rect {
+  if (!meta) return rect;
+
+  const cx = rect.x + rect.w / 2;
+  const cy = rect.y + rect.h / 2;
+
+  let nextW = rect.w;
+  let nextH = rect.h;
+
+  if (meta.orientation === "portrait") {
+    nextW = rect.w * 0.68;
+    nextH = rect.h * 1.16;
+  } else if (meta.orientation === "landscape") {
+    nextW = rect.w * 1.18;
+    nextH = rect.h * 0.88;
+  } else {
+    nextW = rect.w * 0.95;
+    nextH = rect.h * 0.95;
+  }
+
+  return {
+    ...rect,
+    w: nextW,
+    h: nextH,
+    x: cx - nextW / 2,
+    y: cy - nextH / 2,
+  };
+}
 
 export default function HeroSection() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -64,6 +93,14 @@ export default function HeroSection() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [apiData, setApiData] = useState<HeroResponse | null>(null);
+
+  const [imageMeta, setImageMeta] = useState<Record<CardKey, ImageMeta>>({
+    payment: { ratio: 1, orientation: "square" },
+    champion: { ratio: 1, orientation: "square" },
+    cart: { ratio: 1, orientation: "square" },
+    shop3d: { ratio: 1, orientation: "square" },
+    supreme: { ratio: 1, orientation: "square" },
+  });
 
   const cardRefs = useRef<Record<CardKey, HTMLElement | null>>({
     payment: null,
@@ -145,35 +182,99 @@ export default function HeroSection() {
     };
   }, [apiData]);
 
+  /* IMAGE META */
+  useEffect(() => {
+    let active = true;
+
+    const entries = Object.entries(content.cardImages) as [CardKey, string][];
+
+    Promise.all(
+      entries.map(
+        ([key, src]) =>
+          new Promise<[CardKey, ImageMeta]>((resolve) => {
+            const img = new window.Image();
+
+            img.onload = () => {
+              const ratio = img.naturalWidth / img.naturalHeight;
+
+              let orientation: ImageMeta["orientation"] = "square";
+
+              if (ratio < 0.9) orientation = "portrait";
+              else if (ratio > 1.1) orientation = "landscape";
+
+              resolve([
+                key,
+                {
+                  ratio,
+                  orientation,
+                },
+              ]);
+            };
+
+            img.onerror = () =>
+              resolve([
+                key,
+                {
+                  ratio: 1,
+                  orientation: "square",
+                },
+              ]);
+
+            img.src = src;
+          })
+      )
+    ).then((results) => {
+      if (!active) return;
+
+      const next = results.reduce(
+        (acc, [key, meta]) => {
+          acc[key] = meta;
+          return acc;
+        },
+        {} as Record<CardKey, ImageMeta>
+      );
+
+      setImageMeta(next);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [content.cardImages]);
+
   /* LAYOUT SET */
   const S1_SET = isMobile ? S1_MOBILE : S1;
   const S2_SET = isMobile ? S2_MOBILE : S2;
   const OFF_SET = isMobile ? OFF_MOBILE : OFF;
 
   /* RECT CALCULATIONS */
-
   const pay0: Rect = useMemo(
     () => ({ x: 0, y: 0, w: 100, h: 100, r: 0 }),
     []
   );
 
   const pay1 = mixRect(pay0, S1_SET.payment, pIn);
-  const pay2 = mixRect(pay1, S2_SET.payment, pCluster);
+  const pay2Base = mixRect(pay1, S2_SET.payment, pCluster);
 
   const ch1 = mixRect(OFF_SET.champion, S1_SET.champion, pIn);
-  const ch2 = mixRect(ch1, S2_SET.champion, pCluster);
+  const ch2Base = mixRect(ch1, S2_SET.champion, pCluster);
 
   const cart1 = mixRect(OFF_SET.cart, S1_SET.cart, pIn);
-  const cart2 = mixRect(cart1, S2_SET.cart, pCluster);
+  const cart2Base = mixRect(cart1, S2_SET.cart, pCluster);
 
   const shop1 = mixRect(OFF_SET.shop3d, S1_SET.shop3d, pIn);
-  const shop2 = mixRect(shop1, S2_SET.shop3d, pCluster);
+  const shop2Base = mixRect(shop1, S2_SET.shop3d, pCluster);
 
   const sup1 = mixRect(OFF_SET.supreme, S1_SET.supreme, pIn);
-  const sup2 = mixRect(sup1, S2_SET.supreme, pCluster);
+  const sup2Base = mixRect(sup1, S2_SET.supreme, pCluster);
+
+  const pay2 = reshapeRectForImage(pay2Base, imageMeta.payment);
+  const ch2 = reshapeRectForImage(ch2Base, imageMeta.champion);
+  const cart2 = reshapeRectForImage(cart2Base, imageMeta.cart);
+  const shop2 = reshapeRectForImage(shop2Base, imageMeta.shop3d);
+  const sup2 = reshapeRectForImage(sup2Base, imageMeta.supreme);
 
   /* CARD VISIBILITY */
-
   const cardsOpacity = clamp(pIn * 1.25);
 
   const bigTextOpacity = clamp(pIn * 1.6);
@@ -183,7 +284,6 @@ export default function HeroSection() {
   const textTop = lerp(52, 50, pCluster);
 
   /* CARD LIST */
-
   const cards = useMemo(
     () => [
       {
@@ -192,72 +292,47 @@ export default function HeroSection() {
         style: {
           opacity: 1,
           zIndex: 10,
-          background:
-            "linear-gradient(160deg,#e7e7e7,#bdbdbd)",
-          boxShadow: `0 ${lerp(
-            0,
-            14,
-            pIn
-          )}px ${lerp(
-            0,
-            42,
-            pIn
-          )}px rgba(0,0,0,${lerp(0, 0.12, pIn)})`,
         },
       },
-
       {
         key: "champion" as const,
         rect: ch2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background:
-            "linear-gradient(135deg,#e1e1e1,#bfbfbf)",
         },
       },
-
       {
         key: "cart" as const,
         rect: cart2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background:
-            "linear-gradient(135deg,#f6c6d6,#eaa3bd)",
         },
       },
-
       {
         key: "shop3d" as const,
         rect: shop2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background:
-            "linear-gradient(135deg,#ffd166,#f2b500)",
         },
       },
-
       {
         key: "supreme" as const,
         rect: sup2,
         style: {
           opacity: cardsOpacity,
           zIndex: 12,
-          background:
-            "linear-gradient(135deg,#d6dbe1,#b8c1cc)",
         },
       },
     ],
-    [pay2, ch2, cart2, shop2, sup2, cardsOpacity, pIn]
+    [pay2, ch2, cart2, shop2, sup2, cardsOpacity]
   );
 
   /* MOBILE CHECK */
-
   useEffect(() => {
-    const check = () =>
-      setIsMobile(window.innerWidth < 768);
+    const check = () => setIsMobile(window.innerWidth < 768);
 
     check();
 
@@ -265,8 +340,7 @@ export default function HeroSection() {
 
     window.addEventListener("resize", handler);
 
-    return () =>
-      window.removeEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
   }, []);
 
   return (
@@ -283,6 +357,7 @@ export default function HeroSection() {
             }}
             className={styles.card}
             style={rectStyle(rect, style)}
+            data-orientation={imageMeta[key]?.orientation}
           >
             <Image
               src={content.cardImages[key]}
@@ -304,37 +379,20 @@ export default function HeroSection() {
             transform: `translate(-50%, -50%) scale(${textScale})`,
           }}
         >
-          <div
-            className={styles.heroH1}
-            style={{
-              fontSize: `clamp(${lerp(
-                28,
-                46,
-                pCluster
-              )}px, ${lerp(
-                4.8,
-                3.2,
-                pCluster
-              )}vw, ${lerp(
-                72,
-                36,
-                pCluster
-              )}px)`,
-            }}
-          >
-            {content.titleLine1}
-            <br />
+          <div className={styles.heroH1}>
+            <div className={styles.line1}>
+              {content.titleLine1}{" "}
+              <span className={styles.fastWord}>
+                {content.fastWord}
+              </span>{" "}
+              {content.titleLine2AfterFastWord}
+            </div>
 
-            <span className={styles.fastWord}>
-              {content.fastWord}
-            </span>{" "}
-            {content.titleLine2AfterFastWord}
-
-            <br />
-
-            <span className={styles.lastLine}>
-              <span>{content.lastLine}</span>
-            </span>
+            <div className={styles.line2}>
+              <span className={styles.lastLine}>
+                {content.lastLine}
+              </span>
+            </div>
           </div>
         </div>
       </div>

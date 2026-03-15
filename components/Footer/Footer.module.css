@@ -5,6 +5,9 @@
 }
 
 .inner {
+  position: relative;
+  overflow: hidden;
+
   width: min(1386px, calc(100% - 48px));
   margin: 0 auto;
 
@@ -16,6 +19,32 @@
   grid-template-columns: 1.2fr 1fr;
   gap: 64px;
   align-items: start;
+}
+
+.decor {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: auto;
+  transform: none;
+
+ width: min(78%, 1040px);
+  height: 100%;
+
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+}
+
+.decorImg {
+  object-fit: contain;
+  object-position: left bottom;
+}
+
+.left,
+.right {
+  position: relative;
+  z-index: 1;
 }
 
 /* LEFT */
@@ -110,13 +139,15 @@
   font-size: 16px;
 }
 
-
-
 /* 1200-1399 */
 @media (max-width: 1399px) {
   .inner {
     padding: 52px 56px;
     gap: 56px;
+  }
+
+  .decor {
+    width: min(68%, 880px);
   }
 }
 
@@ -126,8 +157,13 @@
     padding: 48px 40px;
     gap: 44px;
   }
+
   .right {
     gap: 40px;
+  }
+
+  .decor {
+    width: min(60%, 860px);
   }
 }
 
@@ -144,6 +180,11 @@
 
   .right {
     justify-content: start;
+  }
+
+  .decor {
+    width: min(72%, 820px);
+    height: 78%;
   }
 }
 
@@ -171,6 +212,11 @@
     font-size: 15px;
     line-height: 24px;
   }
+
+  .decor {
+    width: min(82%, 960px);
+    height: 68%;
+  }
 }
 
 /* 0-575 */
@@ -188,5 +234,10 @@
   .socialBtn {
     width: 42px;
     height: 42px;
+  }
+
+  .decor {
+    width: min(90%, 600px);
+    height: 58%;
   }
 }
