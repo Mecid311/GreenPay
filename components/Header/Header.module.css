@@ -31,13 +31,12 @@
   justify-content: space-between;
   gap: 24px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(23, 78, 53, 0.52) 0%,
-      rgba(14, 51, 34, 0.4) 52%,
-      rgba(9, 31, 21, 0.5) 100%
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(23, 78, 53, 0.52) 0%,
+    rgba(14, 51, 34, 0.4) 52%,
+    rgba(9, 31, 21, 0.5) 100%
+  );
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -59,13 +58,12 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.14) 0%,
-      rgba(255, 255, 255, 0.05) 35%,
-      rgba(255, 255, 255, 0.01) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.05) 35%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
 }
 
 .topBar > * {
@@ -96,6 +94,9 @@
 }
 
 .brandLogo {
+  display: block;
+  width: 37px;
+  height: 47px;
   flex-shrink: 0;
 }
 
@@ -316,13 +317,12 @@
   flex-direction: column;
   gap: 14px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(23, 78, 53, 0.52) 0%,
-      rgba(14, 51, 34, 0.4) 52%,
-      rgba(9, 31, 21, 0.5) 100%
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(23, 78, 53, 0.52) 0%,
+    rgba(14, 51, 34, 0.4) 52%,
+    rgba(9, 31, 21, 0.5) 100%
+  );
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -397,7 +397,7 @@
   min-height: 56px;
   padding: 8px 14px;
   border-radius: 20px;
-
+  border: 0.5px solid #22c55e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -639,7 +639,7 @@
 
   .brandLogo {
     width: 30px;
-    height: auto;
+    height: 38px;
   }
 
   .menuBtn {
@@ -726,6 +726,7 @@
 
   .brandLogo {
     width: 26px;
+    height: 33px;
   }
 
   .menuBtn {

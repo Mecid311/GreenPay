@@ -1,8 +1,10 @@
 export type CertCard = {
   id: string;
-  label?: string;
-  title?: string;
-  variant?: "primary" | "default";
+  label: string;
+  title: string;
+  variant?: "default" | "primary";
+  iconSrc?: string;
+  iconAlt?: string;
 };
 
 export type PartnerLogo = {
@@ -37,10 +39,38 @@ export const defaultCertInfraPartnersContent: Required<CertInfraPartnersResponse
   partnersTitle: "Partnyorlarımız",
 
   certs: [
-    { id: "c1", label: "Sertifikat", title: "Mərkəzi Bank", variant: "default" },
-    { id: "c2", label: "Sertifikat", title: "PCI DSS", variant: "default" },
-    { id: "c3", label: "Sertifikat", title: "Mərkəzi Bank", variant: "default" },
-    { id: "c4", label: "Sertifikat", title: "Mərkəzi Bank", variant: "default" },
+    {
+      id: "c1",
+      label: "Sertifikat",
+      title: "Mərkəzi Bank",
+      variant: "default",
+      iconSrc: "/images/icons/cert-1.svg",
+      iconAlt: "Mərkəzi Bank sertifikat ikonu",
+    },
+    {
+      id: "c2",
+      label: "Sertifikat",
+      title: "PCI DSS",
+      variant: "default",
+      iconSrc: "/images/icons/cert-2.svg",
+      iconAlt: "PCI DSS sertifikat ikonu",
+    },
+    {
+      id: "c3",
+      label: "Sertifikat",
+      title: "Mərkəzi Bank",
+      variant: "default",
+      iconSrc: "/images/icons/cert-3.svg",
+      iconAlt: "Mərkəzi Bank sertifikat ikonu",
+    },
+    {
+      id: "c4",
+      label: "Sertifikat",
+      title: "Mərkəzi Bank",
+      variant: "default",
+      iconSrc: "/images/icons/cert-4.svg",
+      iconAlt: "Mərkəzi Bank sertifikat ikonu",
+    },
   ],
 
   partners: [

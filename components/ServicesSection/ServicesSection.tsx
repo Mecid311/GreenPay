@@ -98,11 +98,13 @@ export default function ServicesSection() {
           />
         </div>
 
+
         <div className={styles.header}>
           <div className={styles.kickerAbs}>
             <span className={styles.kickerText}>{content.kickerText}</span>
             <span className={styles.kickerUnderline} aria-hidden="true" />
           </div>
+
 
           <div className={styles.titleWrap}>
             <h2 className={styles.title}>

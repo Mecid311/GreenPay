@@ -3,9 +3,10 @@
   margin: 0;
   padding: 0;
   display: block;
-  background: #ffffff;
+  background: #f7f7f7;
   overflow-x: hidden;
 }
+
 
 .stage {
   position: relative;
@@ -111,8 +112,12 @@
   width: 56px;
   height: 3px;
   border-radius: 999px;
-  background: #07df84;
-  box-shadow: 0 0 18px rgba(7, 223, 132, 0.35);
+  background: linear-gradient(
+    90deg,
+    rgba(7, 223, 132, 0.25) 0%,
+    rgba(7, 223, 132, 1) 50%,
+    rgba(7, 223, 132, 0.25) 100%
+  );
 }
 
 .title {

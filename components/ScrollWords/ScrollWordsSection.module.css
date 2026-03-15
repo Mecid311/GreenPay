@@ -1,9 +1,8 @@
 .section {
   position: relative;
   width: 100%;
-  /* Scroll məsafəsini mobil üçün bir qədər qısaldırıq */
   height: clamp(260vh, 300vh, 300vh);
-  background: #f2f2ef;
+  background: #f7f7f7;
   overflow: clip;
 }
 
@@ -23,12 +22,10 @@
   z-index: 2;
   width: 100%;
   max-width: 980px;
-  /* Kənarlardan boşluqlar mobilə doğru kiçilir */
   padding: 0 clamp(20px, 4vw, 24px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Elementlər arası məsafə (gap) tam responsivdir */
   gap: clamp(24px, 5vw, 56px);
 }
 
@@ -41,7 +38,6 @@
 }
 
 .iconBox {
-  /* Qutu ölçüləri dərhal reaksiyaya girir */
   width: clamp(44px, 6vw, 66px);
   height: clamp(44px, 6vw, 66px);
   border-radius: clamp(10px, 1.5vw, 14px);
@@ -52,7 +48,6 @@
 }
 
 .wordText {
-  /* Mətn ekran kiçildikcə 24px-ə qədər düşəcək, böyüdükcə 86px olacaq */
   font-size: clamp(24px, 7.5vw, 86px);
   line-height: 0.95;
   font-weight: 800;
@@ -71,21 +66,17 @@
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  /* Mobildə daha şəffaf olacaq */
   opacity: clamp(0.75, 5vw, 0.9);
 }
 
 .topWave {
-  /* Orijinal şaquli mövqeyi qaytarırıq ki, kəsilməsin */
   top: -1060px;
   right: 0;
-  /* Genişlik responsiv olaraq qalır (ekran kiçildikcə kiçiləcək) */
   width: clamp(280px, 54vw, 760px); 
 }
 
 .bottomWave {
   left: 0;
-  /* Orijinal şaquli mövqeyi qaytarırıq */
   bottom: -970px;
   width: clamp(300px, 58vw, 760px);
 }
@@ -99,8 +90,51 @@
 
 .wavePath {
   stroke: rgba(125, 160, 145, 0.42);
-  /* Xəttin qalınlığı da responsiv oldu */
   stroke-width: clamp(2px, 0.3vw, 2.5px);
   stroke-linecap: round;
   fill: none;
+}
+
+@media (max-width: 1024px) {
+  .topWave {
+    top: -780px;
+    width: clamp(260px, 60vw, 620px);
+  }
+
+  .bottomWave {
+    bottom: -720px;
+    width: clamp(260px, 62vw, 640px);
+  }
+}
+
+@media (max-width: 768px) {
+  .topWave {
+    top: -520px;
+    width: clamp(220px, 72vw, 460px);
+    right: -40px;
+    opacity: 0.8;
+  }
+
+  .bottomWave {
+    bottom: -500px;
+    width: clamp(220px, 74vw, 480px);
+    left: -40px;
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 480px) {
+  .topWave {
+    top: -360px;
+    width: 78vw;
+    right: -36px;
+    opacity: 0.72;
+  }
+
+  .bottomWave {
+    bottom: -340px;
+    width: 80vw;
+    left: -36px;
+    opacity: 0.72;
+  }
 }

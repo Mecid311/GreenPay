@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, CSSProperties } from "react";
 import Image from "next/image";
 import styles from "./CertInfraPartnersSection.module.css";
 import { Roboto } from "next/font/google";
@@ -20,12 +20,18 @@ const roboto = Roboto({
 });
 
 export default function CertInfraPartnersSection() {
-  const [apiData, setApiData] = useState<CertInfraPartnersResponse | null>(null);
+  const [apiData, setApiData] = useState<CertInfraPartnersResponse | null>(
+    null,
+  );
 
   useEffect(() => {
     const loadContent = async () => {
-      const data = await fetchCertInfraPartnersContent();
-      setApiData(data);
+      try {
+        const data = await fetchCertInfraPartnersContent();
+        setApiData(data);
+      } catch (error) {
+        console.error("Failed to load cert/infra/partners content:", error);
+      }
     };
 
     loadContent();
@@ -38,12 +44,22 @@ export default function CertInfraPartnersSection() {
     const normalizedCerts: CertCard[] =
       apiCerts && Array.isArray(apiCerts) && apiCerts.length > 0
         ? apiCerts
-            .filter((item) => item?.id && item?.label?.trim() && item?.title?.trim())
-            .map((item) => ({
+            .filter(
+              (item) => item?.id && item?.label?.trim() && item?.title?.trim(),
+            )
+            .map((item, index) => ({
               id: item.id,
               label: item.label!.trim(),
               title: item.title!.trim(),
               variant: item.variant === "primary" ? "primary" : "default",
+              iconSrc:
+                item.iconSrc?.trim() ||
+                defaultCertInfraPartnersContent.certs[index]?.iconSrc ||
+                "/icons/cert-default.svg",
+              iconAlt:
+                item.iconAlt?.trim() ||
+                defaultCertInfraPartnersContent.certs[index]?.iconAlt ||
+                "Card icon",
             }))
         : defaultCertInfraPartnersContent.certs;
 
@@ -62,11 +78,14 @@ export default function CertInfraPartnersSection() {
 
     return {
       titleLine1:
-        apiData?.titleLine1?.trim() || defaultCertInfraPartnersContent.titleLine1,
+        apiData?.titleLine1?.trim() ||
+        defaultCertInfraPartnersContent.titleLine1,
       titleLine2:
-        apiData?.titleLine2?.trim() || defaultCertInfraPartnersContent.titleLine2,
+        apiData?.titleLine2?.trim() ||
+        defaultCertInfraPartnersContent.titleLine2,
       titleLine3:
-        apiData?.titleLine3?.trim() || defaultCertInfraPartnersContent.titleLine3,
+        apiData?.titleLine3?.trim() ||
+        defaultCertInfraPartnersContent.titleLine3,
 
       textLine1:
         apiData?.textLine1?.trim() || defaultCertInfraPartnersContent.textLine1,
@@ -150,8 +169,13 @@ export default function CertInfraPartnersSection() {
                   ].join(" ")}
                 >
                   <div className={styles.cardTop}>
-                    <span className={styles.cardIcon} />
+                    <img
+                      src={c.iconSrc || "/images/icons/cert-default.svg"}
+                      alt={c.iconAlt || "Card icon"}
+                      className={styles.cardIcon}
+                    />
                   </div>
+
                   <span className={styles.cardLabel}>{c.label}</span>
                   <div className={styles.cardTitle}>{c.title}</div>
                   <span className={styles.cardSheen} aria-hidden="true" />
@@ -162,15 +186,25 @@ export default function CertInfraPartnersSection() {
         </div>
 
         <div className={styles.partners}>
-          <div className={styles.partnersTitle}>{content.partnersTitle}</div>
+          <h3 className={styles.partnersTitle}>{content.partnersTitle}</h3>
           <div className={styles.partnerRow}>
             {content.partners.map((p) => (
-              <div key={p.id} className={styles.partnerLogo}>
+              <div
+                key={p.id}
+                className={styles.partnerLogo}
+                style={
+                  {
+                    "--logo-w": `${p.width ?? 180}px`,
+                    "--logo-h": `${p.height ?? 50}px`,
+                  } as React.CSSProperties
+                }
+              >
                 <Image
                   src={p.src || "/images/partnyor/p1.svg"}
                   alt={p.alt || "Partner logo"}
                   width={p.width ?? 180}
                   height={p.height ?? 50}
+                  className={styles.partnerLogoImg}
                 />
               </div>
             ))}

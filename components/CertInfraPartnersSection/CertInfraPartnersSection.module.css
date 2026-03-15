@@ -3,6 +3,7 @@
   min-height: 100vh;
   padding: 0;
   margin: 0;
+  background: #f7f7f7;
 }
 
 .stage {
@@ -164,11 +165,11 @@
 }
 
 .cardIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  background: rgba(185, 255, 210, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: block;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .cardLabel {
@@ -332,31 +333,39 @@
 
 /* --- Partners --- */
 .partners {
-  margin-top: auto;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 8px;
   padding-bottom: clamp(10px, 2vw, 20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .partnersTitle {
+  margin: 0 0 18px 0;
   text-align: center;
   font-size: clamp(20px, 2.4vw, 44px);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: clamp(14px, 2.5vw, 24px);
 }
 
 .partnerRow {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(18px, 3.5vw, 44px);
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: nowrap;
 }
 
 .partnerLogo {
+  height: 173px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.25));
   opacity: 0.9;
   transition:
@@ -364,10 +373,19 @@
     opacity 240ms ease;
 }
 
+.partnerLogoImg {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .partnerLogo:hover {
   transform: translateY(-2px);
   opacity: 1;
 }
+
 
 /* --- Breakpoints --- */
 @media (max-width: 992px) {
@@ -396,5 +414,37 @@
   .quote {
     width: 70px;
     height: auto;
+  }
+}
+
+.partnerRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 79px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .partnerRow {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partnerRow {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .partnerLogo {
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partnerLogo {
+    height: 90px;
   }
 }

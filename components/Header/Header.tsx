@@ -129,13 +129,16 @@ export default function Header() {
           }`}
         >
           <Link href="/" className={styles.brand}>
-            <Image
+            <img
               src={content.brandLogoSrc}
               alt={content.brandLogoAlt}
               width={37}
               height={47}
-              priority
               className={styles.brandLogo}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              draggable={false}
             />
 
             <span className={styles.brandText}>

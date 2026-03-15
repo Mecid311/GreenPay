@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Lightbulb, CarFront, ShieldCheck } from "lucide-react";
 import styles from "./ScrollWordsSection.module.css";
 import { Roboto } from "next/font/google";
 
@@ -30,22 +29,25 @@ const visualPresets = [
   {
     textColor: "#215f47",
     badgeBg: "#b9f1b7",
-    Icon: Lightbulb,
     iconColor: "#215f47",
+    iconSrc: "/images/icons/light.svg",
+    iconAlt: "Lightbulb icon",
   },
   {
     textColor: "#3d4fe0",
     badgeBg: "#cfd8ff",
-    Icon: CarFront,
     iconColor: "#3d4fe0",
+    iconSrc: "/images/icons/car-front.svg",
+    iconAlt: "Car icon",
   },
   {
     textColor: "#0c5c9a",
     badgeBg: "#bfefff",
-    Icon: ShieldCheck,
     iconColor: "#0c5c9a",
+    iconSrc: "/images/icons/shield-check.svg",
+    iconAlt: "Shield icon",
   },
-];
+] as const;
 
 export default function ScrollWordsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -212,7 +214,6 @@ export default function ScrollWordsSection() {
           {words.map((word, index) => {
             const preset = visualPresets[index] ?? visualPresets[0];
             const { opacity, translateY, scale } = getItemStyle(index);
-            const Icon = preset.Icon;
 
             return (
               <div
@@ -227,7 +228,11 @@ export default function ScrollWordsSection() {
                   className={styles.iconBox}
                   style={{ backgroundColor: preset.badgeBg }}
                 >
-                  <Icon size={34} strokeWidth={2.2} color={preset.iconColor} />
+                   <img
+                    src={preset.iconSrc}
+                    alt={preset.iconAlt}
+                    className={styles.icon}
+                  />
                 </div>
 
                 <span
